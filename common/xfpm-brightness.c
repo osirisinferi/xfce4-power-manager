@@ -222,7 +222,7 @@ xfpm_brightness_setup_xrandr (XfpmBrightness *brightness)
 	    {
 		ret = TRUE;
 		brightness->priv->output = brightness->priv->resource->outputs[i];
-		brightness->priv->step =  max <= 20 ? 1 : max / 10;
+		brightness->priv->step =  max <= 20 ? 1 : max / 20;
 	    }
 
 	}
@@ -374,7 +374,7 @@ xfpm_brightness_setup_helper (XfpmBrightness *brightness)
 	brightness->priv->helper_has_hw = TRUE;
 	brightness->priv->min_level = 0;
 	brightness->priv->max_level = ret;
-	brightness->priv->step =  ret <= 20 ? 1 : ret / 10;
+	brightness->priv->step =  ret <= 20 ? 1 : ret / 20;
     }
 
     return brightness->priv->helper_has_hw;
