@@ -58,6 +58,7 @@ enum
     PROP_GENERAL_NOTIFICATION,
     PROP_LOCK_SCREEN_ON_SLEEP,
     PROP_CRITICAL_LEVEL,
+    PROP_BRIGHTNESS_STEP,
     PROP_SHOW_BRIGHTNESS_POPUP,
     PROP_HANDLE_BRIGHTNESS_KEYS,
     PROP_TRAY_ICON,
@@ -269,6 +270,17 @@ xfpm_xfconf_class_init (XfpmXfconfClass *klass)
 							1,
 							20,
 							5,
+                                                        G_PARAM_READWRITE));
+    /**
+     * XfpmXfconf::brightness-step
+     **/
+    g_object_class_install_property (object_class,
+                                     PROP_BRIGHTNESS_STEP,
+                                     g_param_spec_uint (BRIGHTNESS_STEP,
+                                                        NULL, NULL,
+                                                        1,
+                                                        50,
+                                                        5,
                                                         G_PARAM_READWRITE));
 	
     /**

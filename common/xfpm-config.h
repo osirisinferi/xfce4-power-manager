@@ -41,6 +41,8 @@ G_BEGIN_DECLS
 #define CRITICAL_POWER_LEVEL                 "critical-power-level"
 #define CRITICAL_BATT_ACTION_CFG             "critical-power-action"
 
+#define BRIGHTNESS_STEP                      "brightness-step"
+
 #define DPMS_ENABLED_CFG                     "dpms-enabled"
 #define ON_BATTERY_BLANK                     "blank-on-battery"
 #define ON_AC_BLANK                          "blank-on-ac"

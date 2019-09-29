@@ -175,6 +175,9 @@ void        brightness_on_ac_value_changed_cb      (GtkWidget *w,
 gboolean    critical_spin_output_cb                (GtkSpinButton *w, 
 						    gpointer data);
 
+gboolean    step_spin_output_cb                    (GtkSpinButton *w,
+                                                    gpointer data);
+
 void        on_battery_lid_changed_cb              (GtkWidget *w, 
 						    XfconfChannel *channel);
 
@@ -711,6 +714,18 @@ critical_spin_output_cb (GtkSpinButton *w, gpointer data)
     return TRUE;
 }
 
+gboolean
+step_spin_output_cb (GtkSpinButton *w, gpointer data)
+{
+    gint val = (gint) gtk_spin_button_get_value (w);
+    gchar *text = g_strdup_printf ("%d %%", val);
+
+    gtk_entry_set_text (GTK_ENTRY(w), text);
+    g_free (text);
+
+    return TRUE;
+}
+
 void
 on_battery_lid_changed_cb (GtkWidget *w, XfconfChannel *channel)
 {
@@ -769,6 +784,16 @@ critical_level_value_changed_cb (GtkSpinButton *w, XfconfChannel *channel)
     if (!xfconf_channel_set_uint (channel, PROPERTIES_PREFIX CRITICAL_POWER_LEVEL, val) )
     {
 	g_critical ("Unable to set value %d for property %s\n", val, CRITICAL_POWER_LEVEL);
+    }
+}
+
+brightness_step_value_changed_cb (GtkSpinButton *w, XfconfChannel *channel)
+{
+    guint val = (guint) gtk_spin_button_get_value (w);
+
+    if (!xfconf_channel_set_uint (channel, PROPERTIES_PREFIX BRIGHTNESS_STEP, val) )
+    {
+        g_critical ("Unable to set value %d for property %s\n", val, BRIGHTNESS_STEP);
     }
 }
 
@@ -1418,6 +1443,7 @@ xfpm_settings_advanced (XfconfChannel *channel, gboolean auth_suspend,
 {
     guint val;
     GtkWidget *critical_level;
+    GtkWidget *brightness_step;
     GtkWidget *lock;
     GtkWidget *label;
 
@@ -1447,7 +1473,25 @@ xfpm_settings_advanced (XfconfChannel *channel, gboolean auth_suspend,
 	gtk_widget_hide (critical_level);
 	gtk_widget_hide (label);
     }
-	
+
+    /* 
+     * Brightness step
+     */
+    brightness_step = GTK_WIDGET (gtk_builder_get_object (xml, "brightness-step-spin"));
+    gtk_widget_set_tooltip_text (brightness_step,
+                                 _("Number of percentage points to increase or decrease brightness by"));
+
+    val = xfconf_channel_get_uint (channel, PROPERTIES_PREFIX BRIGHTNESS_STEP, 10);
+
+    if ( val > 50 || val < 1)
+    {
+        g_critical ("Value %d if out of range for property %s\n", val, BRIGHTNESS_STEP);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(brightness_step), 5);
+    }
+    else
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(brightness_step), val);
+    step_spin_output_cb (GTK_SPIN_BUTTON(brightness_step), NULL);
+
     /*
      * Lock screen for suspend/hibernate
      */
