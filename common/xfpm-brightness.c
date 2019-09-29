@@ -38,6 +38,7 @@
 
 #include "xfpm-brightness.h"
 #include "xfpm-debug.h"
+#include "xfpm-config.h"
 
 static void xfpm_brightness_finalize   (GObject *object);
 
