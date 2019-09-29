@@ -65,6 +65,12 @@
     <property name="value">3</property>
     <property name="step_increment">1</property>
   </object>
+  <object class="GtkAdjustment" id="brightness-step-spin-adjustment">
+    <property name="lower">1</property>
+    <property name="upper">50</property>
+    <property name="value">5</property>
+    <property name="step_increment">1</property>
+  </object>
   <object class="GtkAdjustment" id="light-locker-late-locking-adjustment">
     <property name="lower">1</property>
     <property name="upper">120</property>
