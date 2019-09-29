@@ -156,6 +156,12 @@ xfpm_brightness_setup_xrandr (XfpmBrightness *brightness)
     gboolean ret = FALSE;
     gint i;
 
+    guint brightness_step;
+
+    g_object_get (G_OBJECT (battery->priv->conf),
+                  BRIGHTNESS_STEP, &brightness_step,
+                  NULL);
+
     gdk_error_trap_push ();
     if (!XRRQueryExtension (gdk_x11_get_default_xdisplay (), &event_base, &error_base) ||
 	!XRRQueryVersion (gdk_x11_get_default_xdisplay (), &major, &minor) )
@@ -211,7 +217,7 @@ xfpm_brightness_setup_xrandr (XfpmBrightness *brightness)
 	    {
 		ret = TRUE;
 		brightness->priv->output = brightness->priv->resource->outputs[i];
-		brightness->priv->step =  max <= 20 ? 1 : max / 20;
+		brightness->priv->step =  max <= 20 ? 1 : max / (100 / brightness_step);
 	    }
 
 	}
@@ -355,6 +361,12 @@ xfpm_brightness_setup_helper (XfpmBrightness *brightness)
 {
     gint32 ret;
 
+    guint brightness_step;
+
+    g_object_get (G_OBJECT (battery->priv->conf),
+                  BRIGHTNESS_STEP, &brightness_step,
+                  NULL);
+
     ret = (gint32) xfpm_brightness_helper_get_value ("get-max-brightness");
     g_debug ("xfpm_brightness_setup_helper: get-max-brightness returned %i", ret);
     if ( ret < 0 ) {
@@ -363,7 +375,7 @@ xfpm_brightness_setup_helper (XfpmBrightness *brightness)
 	brightness->priv->helper_has_hw = TRUE;
 	brightness->priv->min_level = 0;
 	brightness->priv->max_level = ret;
-	brightness->priv->step =  ret <= 20 ? 1 : ret / 20;
+	brightness->priv->step =  ret <= 20 ? 1 : ret / (100 / brightness_step);
     }
 
     return brightness->priv->helper_has_hw;

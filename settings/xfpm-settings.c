@@ -1481,7 +1481,7 @@ xfpm_settings_advanced (XfconfChannel *channel, gboolean auth_suspend,
     gtk_widget_set_tooltip_text (brightness_step,
                                  _("Number of percentage points to increase or decrease brightness by"));
 
-    val = xfconf_channel_get_uint (channel, PROPERTIES_PREFIX BRIGHTNESS_STEP, 10);
+    val = xfconf_channel_get_uint (channel, PROPERTIES_PREFIX BRIGHTNESS_STEP, 5);
 
     if ( val > 50 || val < 1)
     {
